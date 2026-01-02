@@ -12,7 +12,10 @@ connectDB();
 
 const app = express();
 
-/* 🔴 CORS MUST COME FIRST */
+// Body parser
+app.use(express.json());
+
+// Enable CORS
 app.use(
   cors({
     origin: [
@@ -26,11 +29,7 @@ app.use(
 );
 
 app.options("*", cors());
-
-/* 🔴 THEN body parser */
-app.use(express.json());
-
-// Routes
+// Mount routes
 app.use("/api/auth", authRoutes);
 
 // Welcome route
@@ -50,5 +49,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
