@@ -12,18 +12,25 @@ connectDB();
 
 const app = express();
 
-// Body parser
-app.use(express.json());
-
-// Enable CORS
+/* 🔴 CORS MUST COME FIRST */
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    credentials: true,
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://frontend-blond-pi-19.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Mount routes
+app.options("*", cors());
+
+/* 🔴 THEN body parser */
+app.use(express.json());
+
+// Routes
 app.use("/api/auth", authRoutes);
 
 // Welcome route
@@ -43,5 +50,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
